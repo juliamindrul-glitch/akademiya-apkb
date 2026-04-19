@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АКАДЕМИЯ АПКБ — Беспилотные системы и средства защиты</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #9d4edd;
+            --accent: #ff6b35;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: #12121a;
+            --text: #e0e0e0;
+            --text-muted: #888;
+            --grid-color: rgba(0, 212, 255, 0.05);
+        }
+
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .grid-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, var(--darker) 100%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 2rem 80px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        /* Sections */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .glow-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin: 1rem auto;
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, var(--accent), #ff8c42);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .card-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .spec-tag {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+
+        /* Order Process */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .step:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin: 0 auto 1rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .step h3 {
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Forms */
+        .form-section {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(157, 78, 221, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.25rem;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .checkbox-group a {
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+        }
+
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+            transition: all 0.3s;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 30px rgba(0, 212, 255, 0.6);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h4 {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message.bot {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            font-weight: 500;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: var(--text);
+            outline: none;
+        }
+
+        .chat-input button {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal h3 {
+            font-family: 'Orbitron', monospace;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .modal-body {
+            color: var(--text-muted);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            padding: 60px 2rem 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-col h4 {
+            font-family: 'Orbitron', monospace;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-col p,
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-logo {
+            height: 60px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+        }
+
+        /* Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 1.5rem;
+            z-index: 1500;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .cookie-banner.active {
+            display: flex;
+        }
+
+        .cookie-banner p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            max-width: 800px;
+        }
+
+        .cookie-banner a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-window {
+                width: calc(100vw - 2rem);
+                right: -1rem;
+            }
+            
+            .form-section {
+                padding: 1.5rem;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        /* Price List Page */
+        .price-section {
+            display: none;
+        }
+
+        .price-section.active {
+            display: block;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .price-table th,
+        .price-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .price-table th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .price-table tr:hover td {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .back-btn {
+            margin-bottom: 2rem;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showSection('home')">
+                <svg class="footer-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 20 L180 60 L180 140 L100 180 L20 140 L20 60 Z" stroke="url(#grad1)" stroke-width="3" fill="none"/>
+                    <path d="M100 40 L160 70 L160 130 L100 160 L40 130 L40 70 Z" stroke="url(#grad1)" stroke-width="2" fill="none"/>
+                    <circle cx="100" cy="100" r="30" stroke="url(#grad1)" stroke-width="2" fill="none"/>
+                    <path d="M70 100 L130 100 M100 70 L100 130" stroke="url(#grad1)" stroke-width="2"/>
+                    <path d="M100 20 L100 40 M180 60 L160 70 M180 140 L160 130 M100 180 L100 160 M20 140 L40 130 M20 60 L40 70" stroke="url(#grad1)" stroke-width="2"/>
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">АКАДЕМИЯ АПКБ</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#catalog" onclick="showSection('home')">Каталог</a></li>
+                <li><a href="#order" onclick="showSection('home')">Заказать</a></li>
+                <li><a href="#contacts" onclick="showSection('home')">Контакты</a></li>
+                <li><a href="#" onclick="showPriceList(); return false;">Прайс-лист</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        
+        <!-- Hero -->
+        <section class="hero" id="home">
+            <div class="hero-content fade-in">
+                <h1>Беспилотные системы <span>нового поколения</span></h1>
+                <p>Производство, поставка и обучение операторов беспилотных летательных аппаратов общего назначения и средств защиты от БПЛА</p>
+                <div>
+                    <a href="#catalog" class="btn">Смотреть каталог</a>
+                    <a href="#order" class="btn btn-outline">Оставить заявку</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog -->
+        <section id="catalog">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <h2>Каталог продукции</h2>
+                    <div class="glow-line"></div>
+                    <p>Современные решения для задач любой сложности</p>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- БПЛА -->
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge">БПЛА</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/s.alicdn.com/07ef8eb2690fa00e8973d265a72c84c9997b2050.png" alt="Цитрус-10">
+                        </div>
+                        <div class="card-content">
+                            <h3>Цитрус-10</h3>
+                            <p>Беспилотный летательный аппарат общего назначения 10 дюймов. Оптимальное соотношение габаритов и грузоподъемности.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">Полезная нагрузка до 3.5 кг</span>
+                                <span class="spec-tag">Время полета 11 мин</span>
+                                <span class="spec-tag">Дальность 15 км</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('Цитрус-10')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge">БПЛА</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/darwinfpv.com/bb5722fc10e5ff76fe2aa853b70cfb746e0ea53c.jpg" alt="Цитрус-13">
+                        </div>
+                        <div class="card-content">
+                            <h3>Цитрус-13</h3>
+                            <p>Универсальный БПЛА 13 дюймов с расширенной грузоподъемностью для решения широкого спектра задач.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">Полезная нагрузка до 5.5 кг</span>
+                                <span class="spec-tag">Время полета 11 мин</span>
+                                <span class="spec-tag">Дальность 15 км</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('Цитрус-13')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge">БПЛА</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/darwinfpv.com/bb5722fc10e5ff76fe2aa853b70cfb746e0ea53c.jpg" alt="Цитрус-15">
+                        </div>
+                        <div class="card-content">
+                            <h3>Цитрус-15</h3>
+                            <p>Тяжелый БПЛА 15 дюймов максимальной грузоподъемности для специальных операций.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">Полезная нагрузка до 6 кг</span>
+                                <span class="spec-tag">Время полета 15 мин</span>
+                                <span class="spec-tag">Дальность 15 км</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('Цитрус-15')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <!-- Агродрон -->
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #00ff88, #00cc66);">Агротехника</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/rcdrone.top/d20cea8e93bba6ae700e9883ee8cda22b0f01195.jpg" alt="AGR-100B">
+                        </div>
+                        <div class="card-content">
+                            <h3>AGR-100B</h3>
+                            <p>Аграрный дрон для обработки полей. Емкость бака 50л, производительность 12-14 га/час.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">Бак 50 л</span>
+                                <span class="spec-tag">12-14 га/час</span>
+                                <span class="spec-tag">Защита IP67</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('AGR-100B')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <!-- Наземные -->
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #ff6b35, #ff8c42);">Наземные</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.generationrobots.com/00cd571e75b4b3d8196cf0c27d758333a3a4b6a0.jpg" alt="Гуся-У">
+                        </div>
+                        <div class="card-content">
+                            <h3>Гуся-У</h3>
+                            <p>Беспилотный наземный аппарат на гусеничном ходу. Грузоподъемность 150 кг, время работы 4 часа.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">Грузоподъемность 150 кг</span>
+                                <span class="spec-tag">Скорость до 30 км/ч</span>
+                                <span class="spec-tag">Дальность связи 5 км</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('Гуся-У')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <!-- Средства защиты -->
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #ff0044, #ff3366);">Защита</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.nqdefense.com/7fc13d51a3584ec7d502fbba259a31f6a77d5960.webp" alt="ТВЕРДЫНЯ-01">
+                        </div>
+                        <div class="card-content">
+                            <h3>ТВЕРДЫНЯ-01</h3>
+                            <p>Система обнаружения дронов. Пассивное обнаружение в диапазоне 300-6000 МГц, радиус 6-10 км.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">360° обзор</span>
+                                <span class="spec-tag">Дальность 6-10 км</span>
+                                <span class="spec-tag">Пассивное обнаружение</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('ТВЕРДЫНЯ-01')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #ff0044, #ff3366);">Защита</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.nqdefense.com/de31d506831e80743c3b8b55fa5c19707df31b77.webp" alt="ТВЕРДЫНЯ-02С">
+                        </div>
+                        <div class="card-content">
+                            <h3>ТВЕРДЫНЯ-02С</h3>
+                            <p>Радар малой высоты. Импульсная доплеровская РЛС с машинным азимутальным сканированием.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">X-диапазон</span>
+                                <span class="spec-tag">Дальность до 10 км</span>
+                                <span class="spec-tag">Точность ≤0.5°</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('ТВЕРДЫНЯ-02С')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #ff0044, #ff3366);">Защита</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/img.aeroexpo.com.ru/445f04f333fcb01fc6496a9d38fcb853d888b447.webp" alt="ТВЕРДЫНЯ-04Ф">
+                        </div>
+                        <div class="card-content">
+                            <h3>ТВЕРДЫНЯ-04Ф</h3>
+                            <p>Оптикоэлектрическая система идентификации и слежения. Видимый свет ≥3 км, ИК ≥1.5 км.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">Видимый свет 3 км</span>
+                                <span class="spec-tag">Тепловизор 1.5 км</span>
+                                <span class="spec-tag">IP66</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('ТВЕРДЫНЯ-04Ф')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <!-- Спецоборудование -->
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #9d4edd, #c77dff);">Наблюдение</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/www.spotterglobal.com/15d1ade08478c937efe5192c8f5da8bca391baea.jpg" alt="ОКО-4М">
+                        </div>
+                        <div class="card-content">
+                            <h3>ОКО-4М</h3>
+                            <p>Комплекс дальнего наблюдения. 4 камеры, запись на флеш-носитель, обнаружение человека с помощью ИИ.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">4 камеры</span>
+                                <span class="spec-tag">Дальность 5-20 км</span>
+                                <span class="spec-tag">Распознавание ИИ</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('ОКО-4М')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+
+                    <div class="card fade-in">
+                        <div class="card-image">
+                            <span class="card-badge" style="background: linear-gradient(135deg, #9d4edd, #c77dff);">Ночное видение</span>
+                            <img src="https://kimi-web-img.moonshot.cn/img/us03-imgcdn.ymcart.com/a0f54930e18f1f7a4c3261796bb131ee05baa1df.jpg" alt="Шлем Филин">
+                        </div>
+                        <div class="card-content">
+                            <h3>Шлем Филин</h3>
+                            <p>Шлем ночного видения с инфракрасной и тепловизионной камерой. Дальность обзора до 500м.</p>
+                            <div class="card-specs">
+                                <span class="spec-tag">ИК + тепловизор</span>
+                                <span class="spec-tag">Дальность 500 м</span>
+                                <span class="spec-tag">Время работы 6-8 ч</span>
+                            </div>
+                            <button class="btn" onclick="openOrderForm('Шлем Филин')" style="width: 100%;">Заказать</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Process -->
+        <section id="order" style="background: linear-gradient(180deg, transparent, rgba(0,212,255,0.03), transparent);">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <h2>Схема заказа</h2>
+                    <div class="glow-line"></div>
+                    <p>Простой и прозрачный процесс получения оборудования</p>
+                </div>
+
+                <div class="process-steps">
+                    <div class="step fade-in">
+                        <div class="step-number">01</div>
+                        <h3>Заявка</h3>
+                        <p>Оставьте заявку на сайте или свяжитесь с нами по телефону. Укажите интересующую модель и количество.</p>
+                    </div>
+                    <div class="step fade-in">
+                        <div class="step-number">02</div>
+                        <h3>Консультация</h3>
+                        <p>Наш специалист свяжется с вами для уточнения деталей, комплектации и сроков поставки.</p>
+                    </div>
+                    <div class="step fade-in">
+                        <div class="step-number">03</div>
+                        <h3>Договор</h3>
+                        <p>Заключаем договор поставки с учетом всех ваших требований и условий оплаты.</p>
+                    </div>
+                    <div class="step fade-in">
+                        <div class="step-number">04</div>
+                        <h3>Поставка и обучение</h3>
+                        <p>Доставка оборудования и проведение обучения операторов по готовности.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 4rem;" class="fade-in">
+                    <div class="form-section">
+                        <h3 style="font-family: 'Orbitron', monospace; margin-bottom: 2rem; text-align: center; color: var(--primary);">Форма заявки</h3>
+                        <form id="orderForm" onsubmit="submitOrder(event)">
+                            <div class="form-group">
+                                <label>Ваше имя *</label>
+                                <input type="text" name="name" required placeholder="Иванов Иван Иванович">
+                            </div>
+                            <div class="form-group">
+                                <label>Телефон *</label>
+                                <input type="tel" name="phone" required placeholder="+7 (999) 999-99-99">
+                            </div>
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" name="email" required placeholder="example@mail.ru">
+                            </div>
+                            <div class="form-group">
+                                <label>Интересующая модель</label>
+                                <select name="model" id="modelSelect">
+                                    <option value="">Выберите модель</option>
+                                    <option value="Цитрус-10">Цитрус-10</option>
+                                    <option value="Цитрус-13">Цитрус-13</option>
+                                    <option value="Цитрус-15">Цитрус-15</option>
+                                    <option value="AGR-100B">AGR-100B</option>
+                                    <option value="Гуся-У">Гуся-У</option>
+                                    <option value="ТВЕРДЫНЯ-01">ТВЕРДЫНЯ-01</option>
+                                    <option value="ТВЕРДЫНЯ-02С">ТВЕРДЫНЯ-02С</option>
+                                    <option value="ТВЕРДЫНЯ-04Ф">ТВЕРДЫНЯ-04Ф</option>
+                                    <option value="ОКО-4М">ОКО-4М</option>
+                                    <option value="Шлем Филин">Шлем Филин</option>
+                                    <option value="Другое">Другое (указать в комментарии)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Количество</label>
+                                <input type="number" name="quantity" min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Комментарий</label>
+                                <textarea name="comment" rows="3" placeholder="Дополнительные требования, вопросы..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Удобный способ связи</label>
+                                <select name="contact_method">
+                                    <option value="phone">Телефон</option>
+                                    <option value="email">Email</option>
+                                    <option value="telegram">Telegram</option>
+                                    <option value="whatsapp">WhatsApp</option>
+                                </select>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="agree" required>
+                                <label for="agree">Я согласен на обработку персональных данных и ознакомлен с <a onclick="openModal('privacy')">Политикой конфиденциальности</a> *</label>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Отправить заявку</button>
+                            <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">* Поля обязательны для заполнения</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contacts -->
+        <section id="contacts">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <h2>Контакты</h2>
+                    <div class="glow-line"></div>
+                    <p>Свяжитесь с нами удобным способом</p>
+                </div>
+
+                <div class="cards-grid" style="max-width: 800px; margin: 0 auto;">
+                    <div class="card fade-in" style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📍</div>
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Адрес</h3>
+                        <p>г. Таганрог, ул. Социалистическая, 26<br>Ростовская область, Россия</p>
+                    </div>
+                    <div class="card fade-in" style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📞</div>
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Телефон</h3>
+                        <p><a href="tel:+79930803399" style="color: var(--text); text-decoration: none; font-size: 1.2rem;">+7 (993) 080-33-99</a></p>
+                    </div>
+                    <div class="card fade-in" style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✉️</div>
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Email</h3>
+                        <p><a href="mailto:akademy.apkb@mail.ru" style="color: var(--text); text-decoration: none;">akademy.apkb@mail.ru</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Price List Section (Hidden by default) -->
+    <div id="price-section" class="price-section">
+        <section>
+            <div class="container">
+                <button class="btn back-btn" onclick="showSection('home')">← Вернуться на главную</button>
+                <div class="section-header">
+                    <h2>Прайс-лист</h2>
+                    <div class="glow-line"></div>
+                    <p>Актуальные цены на продукцию (обновлено: апрель 2026)</p>
+                </div>
+
+                <div class="checkbox-group" style="margin-bottom: 2rem; padding: 1rem; background: rgba(0,212,255,0.05); border-radius: 10px;">
+                    <input type="checkbox" id="price-agree" onchange="togglePriceList()">
+                    <label for="price-agree"><strong>Я подтверждаю, что ознакомлен с условиями поставки и политикой конфиденциальности. Цены указаны с учетом НДС. Безналичный расчет +11%.</strong></label>
+                </div>
+
+                <div id="price-content" style="display: none;">
+                    <h3 style="color: var(--primary); margin: 2rem 0 1rem; font-family: 'Orbitron', monospace;">Беспилотные летательные аппараты общего назначения</h3>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Модель</th>
+                                <th>Характеристики</th>
+                                <th>Цена, руб.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Цитрус-10</strong><br>Базовая комплектация</td>
+                                <td>Полезная нагрузка 3.5 кг, время полета 11 мин, дальность 15 км</td>
+                                <td class="highlight">71 500</td>
+                            </tr>
+                            <tr>
+                                <td>Цитрус-10 + Ночная камера</td>
+                                <td>Повышенная светочувствительность</td>
+                                <td class="highlight">+6 600</td>
+                            </tr>
+                            <tr>
+                                <td>Цитрус-10 + Тепловизор 384</td>
+                                <td>Разрешение 384×288, работа ночью</td>
+                                <td class="highlight">+44 000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Цитрус-13</strong><br>Базовая комплектация</td>
+                                <td>Полезная нагрузка 5.5 кг, время полета 11 мин, дальность 15 км</td>
+                                <td class="highlight">93 500</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Цитрус-15</strong><br>Базовая комплектация</td>
+                                <td>Полезная нагрузка 6 кг, время полета 15 мин, дальность 15 км</td>
+                                <td class="highlight">126 500</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="background: rgba(0,212,255,0.05); padding: 1rem; color: var(--primary);"><strong>Модификации и дополнительное оборудование:</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Система сброса «4-Г»</td>
+                                <td>Под 4 гранаты (Ф-1, РГО, РГН, РГД)</td>
+                                <td class="highlight">+8 800</td>
+                            </tr>
+                            <tr>
+                                <td>Система сброса «БП-У»</td>
+                                <td>Универсальное крепление</td>
+                                <td class="highlight">+7 150</td>
+                            </tr>
+                            <tr>
+                                <td>Система сброса «Тетрис»</td>
+                                <td>Под ВОГ-17/25</td>
+                                <td class="highlight">+6 600</td>
+                            </tr>
+                            <tr>
+                                <td>Система «Выстрел»</td>
+                                <td>2 ствола под 12 калибр, борьба с БпЛА</td>
+                                <td class="highlight">+18 700</td>
+                            </tr>
+                            <tr>
+                                <td>Шифратор видео</td>
+                                <td>Шифрование аналогового видеосигнала</td>
+                                <td class="highlight">+7 700</td>
+                            </tr>
+                            <tr>
+                                <td>Бичастотник</td>
+                                <td>Работа на 2-х частотах управления</td>
+                                <td class="highlight">+9 900</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin: 2rem 0 1rem; font-family: 'Orbitron', monospace;">Агротехника</h3>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Модель</th>
+                                <th>Характеристики</th>
+                                <th>Цена, руб.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>AGR-100B</strong></td>
+                                <td>Бак 50л, 12-14 га/час, IP67, комплект с генератором</td>
+                                <td class="highlight">3 850 000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin: 2rem 0 1rem; font-family: 'Orbitron', monospace;">Наземные аппараты</h3>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Модель</th>
+                                <th>Характеристики</th>
+                                <th>Цена, руб.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Гуся-У</strong></td>
+                                <td>Грузоподъемность 150 кг, скорость 30 км/ч, время работы 4ч</td>
+                                <td class="highlight">440 000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin: 2rem 0 1rem; font-family: 'Orbitron', monospace;">Средства защиты от БПЛА</h3>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Модель</th>
+                                <th>Характеристики</th>
+                                <th>Цена, руб.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ТВЕРДЫНЯ-01</strong></td>
+                                <td>Система обнаружения, 300-6000 МГц, радиус 6-10 км</td>
+                                <td class="highlight">По запросу</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ТВЕРДЫНЯ-02С</strong></td>
+                                <td>Радар малой высоты, X-диапазон, дальность 10 км</td>
+                                <td class="highlight">По запросу</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ТВЕРДЫНЯ-04Ф</strong></td>
+                                <td>Оптикоэлектрическая система, день/ночь, IP66</td>
+                                <td class="highlight">По запросу</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="color: var(--primary); margin: 2rem 0 1rem; font-family: 'Orbitron', monospace;">Специальное оборудование</h3>
+                    <table class="price-table">
+                        <thead>
+                            <tr>
+                                <th>Модель</th>
+                                <th>Характеристики</th>
+                                <th>Цена, руб.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ОКО-4М</strong></td>
+                                <td>Комплекс наблюдения, 4 камеры, ИИ, дальность 5-20 км</td>
+                                <td class="highlight">495 000</td>
+                            </tr>
+                            <tr>
+                                <td>ОКО-4М + Тепловизор</td>
+                                <td>Обнаружение человека 2 км, авто 5 км</td>
+                                <td class="highlight">+275 000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Шлем Филин</strong></td>
+                                <td>Ночное видение, ИК + тепловизор, 6-8 часов</td>
+                                <td class="highlight">308 000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Шлем СОВА</strong></td>
+                                <td>Ночное видение, ИК камера, 6-8 часов</td>
+                                <td class="highlight">132 000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>НСУ КАРС-В</strong></td>
+                                <td>Наземная станция управления, оптоволокно, 14"</td>
+                                <td class="highlight">275 000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Модуль к НСУ</strong></td>
+                                <td>Управление + видеосигнал, оптоволокно 150м</td>
+                                <td class="highlight">107 800</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Воздушный ретранслятор</strong></td>
+                                <td>Усиление 9-12 dbi, комплект антенн</td>
+                                <td class="highlight">70 400</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 3rem; padding: 2rem; background: rgba(255,107,53,0.05); border: 1px solid rgba(255,107,53,0.2); border-radius: 15px;">
+                        <h4 style="color: var(--accent); margin-bottom: 1rem;">Важно:</h4>
+                        <ul style="color: var(--text-muted); padding-left: 1.5rem; line-height: 2;">
+                            <li>Цены указаны за наличный расчет</li>
+                            <li>Безналичный расчет +11%</li>
+                            <li>Срок поставки: от 14 рабочих дней в зависимости от комплектации</li>
+                            <li>Гарантия: 12 месяцев</li>
+                            <li>Обучение операторов включено в стоимость при заказе от 3 единиц</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <svg class="footer-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 20 L180 60 L180 140 L100 180 L20 140 L20 60 Z" stroke="url(#grad2)" stroke-width="3" fill="none"/>
+                    <path d="M100 40 L160 70 L160 130 L100 160 L40 130 L40 70 Z" stroke="url(#grad2)" stroke-width="2" fill="none"/>
+                    <circle cx="100" cy="100" r="30" stroke="url(#grad2)" stroke-width="2" fill="none"/>
+                    <path d="M70 100 L130 100 M100 70 L100 130" stroke="url(#grad2)" stroke-width="2"/>
+                    <defs>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h4>АКАДЕМИЯ АПКБ</h4>
+                <p>Академия аэроразведки и подготовки кадров БАС</p>
+                <p style="margin-top: 1rem;">Лицензия на образовательную деятельность № Л035-01240-08/01345323 от 13.08.2024</p>
+            </div>
+            <div class="footer-col">
+                <h4>Разделы</h4>
+                <a href="#catalog" onclick="showSection('home')">Каталог продукции</a>
+                <a href="#order" onclick="showSection('home')">Оформить заказ</a>
+                <a href="#" onclick="showPriceList(); return false;">Прайс-лист</a>
+                <a href="#contacts" onclick="showSection('home')">Контакты</a>
+            </div>
+            <div class="footer-col">
+                <h4>Документы</h4>
+                <a onclick="openModal('privacy')">Политика конфиденциальности</a>
+                <a onclick="openModal('personal')">Политика обработки персональных данных</a>
+                <a onclick="openModal('consent')">Согласие на обработку ПД</a>
+                <a onclick="openModal('cookie')">Политика использования cookie</a>
+                <a onclick="openModal('disclaimer')">Отказ от ответственности</a>
+                <a onclick="openModal('factcheck')">Политика проверки фактов</a>
+                <a onclick="openModal('terms')">Пользовательское соглашение</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p>г. Таганрог, ул. Социалистическая, 26</p>
+                <p><a href="tel:+79930803399">+7 (993) 080-33-99</a></p>
+                <p><a href="mailto:akademy.apkb@mail.ru">akademy.apkb@mail.ru</a></p>
+                <p style="margin-top: 1rem; font-size: 0.85rem;">ИНН: 140203283546<br>ОГРНИП: 325619600173065</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 АКАДЕМИЯ АПКБ. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <h4>Консультант Алексей</h4>
+                <button class="chat-close" onclick="toggleChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    Здравствуйте! Меня зовут Алексей, я специалист по беспилотным системам. Чем могу помочь? У нас вы можете приобрести БПЛА, средства защиты от дронов, а также пройти обучение операторов.
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Введите сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
+                <button onclick="sendMessage()">→</button>
+            </div>
+        </div>
+        <button class="chat-toggle" onclick="toggleChat()">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div>
+            <p><strong>Мы используем файлы cookie</strong><br>
+            Этот сайт использует cookie для анализа трафика, персонализации контента и отслеживания поведения пользователей. Продолжая использовать сайт, вы соглашаетесь с нашей <a onclick="openModal('cookie')">Политикой использования файлов cookie</a>.</p>
+        </div>
+        <button class="btn" onclick="acceptCookies()">Принять</button>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h3 id="modalTitle">Заголовок</h3>
+            <div class="modal-body" id="modalBody">Содержимое</div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Chat functionality
+        let chatHistory = [];
+        const botName = 'Алексей';
+
+        function toggleChat() {
+            const chat = document.getElementById('chatWindow');
+            chat.classList.toggle('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            input.value = '';
+            
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(text);
+                addMessage(response, 'bot');
+                saveChatToEmail();
+            }, 1000);
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chatMessages');
+            const msg = document.createElement('div');
+            msg.className = `message ${sender}`;
+            msg.textContent = text;
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            
+            chatHistory.push({
+                sender: sender === 'bot' ? botName : 'Клиент',
+                text: text,
+                time: new Date().toLocaleString()
+            });
+        }
+
+        function getBotResponse(text) {
+            const lower = text.toLowerCase();
+            
+            if (lower.includes('цена') || lower.includes('стоимость') || lower.includes('сколько')) {
+                return 'Для получения актуального прайс-листа, пожалуйста, оставьте заявку на сайте или укажите ваш email/телефон. Я вышлем вам полный каталог с ценами. Также напомню, что при безналичном расчете стоимость увеличивается на 11%.';
+            }
+            if (lower.includes('срок') || lower.includes('доставка') || lower.includes('когда')) {
+                return 'Срок поставки зависит от комплектации и наличия на складе. В среднем от 14 рабочих дней. Для точных сроков по вашей конфигурации оставьте заявку — я передам менеджеру.';
+            }
+            if (lower.includes('обучение') || lower.includes('курсы') || lower.includes('научить')) {
+                return 'Да, мы проводим обучение операторов. При заказе от 3 единиц техники обучение включено в стоимость. Также у нас есть лицензия на образовательную деятельность. Подробности по телефону +7 (993) 080-33-99.';
+            }
+            if (lower.includes('гарантия') || lower.includes('ремонт') || lower.includes('сломал')) {
+                return 'На всю продукцию предоставляется гарантия 12 месяцев. Также осуществляем постгарантийное обслуживание и поставку запчастей.';
+            }
+            if (lower.includes('заказ') || lower.includes('купить') || lower.includes('приобрести')) {
+                return 'Чтобы оформить заказ, заполните форму на сайте в разделе "Заказать" или оставьте здесь ваши контакты (телефон/email). Наш менеджер свяжется с вами в течение часа.';
+            }
+            if (lower.includes('контакт') || lower.includes('телефон') || lower.includes('почта')) {
+                return 'Наши контакты: тел. +7 (993) 080-33-99, email: akademy.apkb@mail.ru. Адрес: г. Таганрог, ул. Социалистическая, 26.';
+            }
+            
+            return 'Благодарю за обращение! Чтобы я мог дать точный ответ, уточните: вас интересует конкретная модель БПЛА, средства защиты от дронов, или вопрос по обучению? Также вы можете оставить номер телефона — я передам его менеджеру для детальной консультации.';
+        }
+
+        function saveChatToEmail() {
+            // In real implementation, this would send to server
+            console.log('Chat history to be sent to akademy.apkb@mail.ru:', chatHistory);
+        }
+
+        // Form handling
+        function openOrderForm(model) {
+            showSection('home');
+            document.getElementById('modelSelect').value = model;
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            if (!document.getElementById('agree').checked) {
+                alert('Необходимо согласиться с обработкой персональных данных');
+                return;
+            }
+
+            // Prepare email content
+            const subject = `Новая заявка с сайта - ${data.model || 'Не указано'}`;
+            const body = `
+Имя: ${data.name}
+Телефон: ${data.phone}
+Email: ${data.email}
+Модель: ${data.model || 'Не указано'}
+Количество: ${data.quantity}
+Способ связи: ${data.contact_method}
+Комментарий: ${data.comment || 'Нет'}
+            `;
+
+            // Send to email (mailto link as fallback)
+            window.location.href = `mailto:akademy.apkb@mail.ru?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Show success
+            alert('Заявка отправлена! Наш менеджер свяжется с вами в ближайшее время. Каталог с ценами будет отправлен на указанную почту.');
+            e.target.reset();
+        }
+
+        // Section switching
+        function showSection(section) {
+            if (section === 'home') {
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('price-section').classList.remove('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showPriceList() {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('price-section').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function togglePriceList() {
+            const checkbox = document.getElementById('price-agree');
+            const content = document.getElementById('price-content');
+            content.style.display = checkbox.checked ? 'block' : 'none';
+            
+            if (checkbox.checked) {
+                // Send notification about price list access
+                console.log('Price list accessed - notification to be sent to akademy.apkb@mail.ru');
+            }
+        }
+
+        // Cookie handling
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieBanner').classList.remove('active');
+            initializeTracking();
+        }
+
+        function initializeTracking() {
+            // Cookie tracking implementation
+            // Tracks: page views, time on site, clicked products, chat interactions
+            const tracking = {
+                sessionId: Date.now(),
+                startTime: new Date().toISOString(),
+                pages: [window.location.pathname],
+                clicks: [],
+                source: document.referrer || 'direct'
+            };
+            
+            localStorage.setItem('tracking', JSON.stringify(tracking));
+            
+            // Track clicks
+            document.addEventListener('click', (e) => {
+                const target = e.target.closest('.card, .btn, a');
+                if (target) {
+                    const data = JSON.parse(localStorage.getItem('tracking') || '{}');
+                    data.clicks.push({
+                        element: target.tagName,
+                        text: target.textContent?.substring(0, 50),
+                        time: new Date().toISOString()
+                    });
+                    localStorage.setItem('tracking', JSON.stringify(data));
+                }
+            });
+        }
+
+        // Check cookies on load
+        window.addEventListener('load', () => {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                setTimeout(() => {
+                    document.getElementById('cookieBanner').classList.add('active');
+                }, 2000);
+            } else {
+                initializeTracking();
+            }
+        });
+
+        // Modals
+        const modalContent = {
+            privacy: {
+                title: 'Политика конфиденциальности',
+                body: `Политика конфиденциальности персональных данных
+
+Настоящая Политика конфиденциальности персональных данных (далее – Политика конфиденциальности) действует в отношении всей информации, которую Общество с ограниченной ответственностью «АКАДЕМИЯ АПКБ» (далее – Компания) может получить о Пользователе во время использования сайта.
+
+1. ОПРЕДЕЛЕНИЕ ТЕРМИНОВ
+
+1.1. В настоящей Политике конфиденциальности используются следующие термины:
+1.1.1. «Администрация сайта» – уполномоченные сотрудники на управления сайтом, действующие от имени Компании.
+1.1.2. «Персональные данные» – любая информация, относящаяся к прямо или косвенно определенному или определяемому физическому лицу (субъекту персональных данных).
+1.1.3. «Обработка персональных данных» – любое действие (операция) или совокупность действий (операций), совершаемых с использованием средств автоматизации или без использования таких средств с персональными данными.
+
+2. ОБЩИЕ ПОЛОЖЕНИЯ
+
+2.1. Использование Пользователем сайта означает согласие с настоящей Политикой конфиденциальности и условиями обработки персональных данных Пользователя.
+2.2. В случае несогласия с условиями Политики конфиденциальности Пользователь должен прекратить использование сайта.
+2.3. Настоящая Политика конфиденциальности применяется только к данному сайту. Компания не контролирует и не несет ответственность за сайты третьих лиц, на которые Пользователь может перейти по ссылкам, доступным на данном сайте.
+
+3. ПРЕДМЕТ ПОЛИТИКИ КОНФИДЕНЦИАЛЬНОСТИ
+
+3.1. Настоящая Политика конфиденциальности устанавливает обязательства Администрации сайта по неразглашению и обеспечению режима защиты конфиденциальности персональных данных, которые Пользователь предоставляет по запросу Администрации сайта при регистрации на сайте или при оформлении заказа.
+3.2. Персональные данные, разрешённые к обработке в рамках настоящей Политики конфиденциальности, предоставляются Пользователем путём заполнения регистрационной формы на сайте и включают в себя следующую информацию:
+3.2.1. фамилию, имя, отчество Пользователя;
+3.2.2. контактный телефон Пользователя;
+3.2.3. адрес электронной почты (e-mail);
+3.2.4. адрес доставки товара.
+
+4. ЦЕЛИ СБОРА ПЕРСОНАЛЬНОЙ ИНФОРМАЦИИ ПОЛЬЗОВАТЕЛЯ
+
+4.1. Персональные данные Пользователя Администрация сайта может использовать в целях:
+4.1.1. Идентификации Пользователя, зарегистрированного на сайте, для оформления заказа и (или) заключения Договора купли-продажи товара дистанционным способом.
+4.1.2. Установления с Пользователем обратной связи, включая направление уведомлений, запросов, касающихся использования сайта, оказания услуг, обработка запросов и заявок от Пользователя.
+4.1.3. Определения места нахождения Пользователя для обеспечения безопасности, предотвращения мошенничества.
+4.1.4. Подтверждения достоверности и полноты персональных данных, предоставленных Пользователем.
+4.1.5. Создания учетной записи для совершения покупок, если Пользователь дал согласие на создание учетной записи.
+4.1.6. Уведомления Пользователя сайта о состоянии Заказа.
+4.1.7. Обработки и получения платежей, подтверждения налога или налоговых льгот, оспаривания платежа.
+
+5. СПОСОБЫ И СРОКИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ
+
+5.1. Обработка персональных данных Пользователя осуществляется без ограничения срока, любым законным способом, в том числе в информационных системах персональных данных с использованием средств автоматизации или без использования таких средств.
+5.2. Пользователь соглашается с тем, что Администрация сайта вправе передавать персональные данные третьим лицам, в частности, курьерским службам, организациями почтовой связи, операторам электросвязи, исключительно в целях выполнения заказа Пользователя.
+5.3. Персональные данные Пользователя могут быть переданы уполномоченным органам государственной власти Российской Федерации только по основаниям и в порядке, установленным законодательством Российской Федерации.
+
+6. ОБЯЗАТЕЛЬСТВА СТОРОН
+
+6.1. Пользователь обязан:
+6.1.1. Предоставить информацию о персональных данных, необходимую для пользования сайтом.
+6.1.2. Обновить, дополнить предоставленную информацию о персональных данных в случае изменения данной информации.
+6.2. Администрация сайта обязана:
+6.2.1. Использовать полученную информацию исключительно для целей, указанных в п. 4 настоящей Политики конфиденциальности.
+6.2.2. Обеспечить хранение конфиденциальной информации в тайне, не разглашать без предварительного письменного разрешения Пользователя, а также не осуществлять продажу, обмен, опубликование либо разглашение иными возможными способами переданных персональных данных Пользователя.
+6.2.3. Принимать меры предосторожности для защиты конфиденциальности персональных данных Пользователя согласно порядку, обычно используемому для защиты такого рода информации в существующем деловом обороте.
+
+7. ОТВЕТСТВЕННОСТЬ СТОРОН
+
+7.1. Администрация сайта, не исполнившая свои обязательства, несёт ответственность за убытки, понесённые Пользователем в связи с неправомерным использованием персональных данных, в соответствии с законодательством Российской Федерации.
+7.2. В случае утраты или разглашения конфиденциальной информации Администрация сайта не несёт ответственность, если данная конфиденциальная информация:
+7.2.1. Стала публичным достоянием до её утраты или разглашения.
+7.2.2. Была получена от третьей стороны до момента её получения Администрацией сайта.
+7.2.3. Была разглашена с согласия Пользователя.
+
+8. РАЗРЕШЕНИЕ СПОРОВ
+
+8.1. До обращения в суд с иском по спорам, возникающим из отношений между Пользователем сайта и Администрацией сайта, обязательным является предъявление претензии (письменного предложения о добровольном урегулировании спора).
+8.2. Получатель претензии в течение 30 календарных дней со дня получения претензии, письменно уведомляет заявителя претензии о результатах рассмотрения претензии.
+8.3. При не достижении соглашения спор будет передан на рассмотрение в судебный орган в соответствии с действующим законодательством Российской Федерации.
+
+9. ДОПОЛНИТЕЛЬНЫЕ УСЛОВИЯ
+
+9.1. Администрация сайта вправе вносить изменения в настоящую Политику конфиденциальности без согласия Пользователя.
+9.2. Новая Политика конфиденциальности вступает в силу с момента ее размещения на сайте, если иное не предусмотрено новой редакцией Политики конфиденциальности.`
+            },
+            personal: {
+                title: 'Политика в отношении обработки персональных данных',
+                body: `ПОЛИТИКА В ОТНОШЕНИИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ
+
+1. Общие положения
+1.1. Настоящая Политика в отношении обработки персональных данных (далее – Политика) разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».
+1.2. Оператор персональных данных – Индивидуальный предприниматель Миндрул Юлия Валерьевна (ИНН 140203283546, ОГРНИП 325619600173065), действующий от имени АКАДЕМИИ АПКБ.
+1.3. Политика действует в отношении всех персональных данных, которые Оператор может получить от субъектов персональных данных.
+
+2. Принципы обработки персональных данных
+2.1. Обработка персональных данных осуществляется на законной и справедливой основе.
+2.2. Обработка персональных данных ограничивается достижением конкретных, заранее определенных и законных целей.
+2.3. Не допускается обработка персональных данных, несовместимая с целями сбора персональных данных.
+2.4. Не допускается объединение баз данных, содержащих персональные данные, обработка которых осуществляется в целях, несовместимых между собой.
+
+3. Цели обработки персональных данных
+3.1. Обработка персональных данных осуществляется в следующих целях:
+- заключение и исполнение договоров с субъектами персональных данных;
+- предоставление информации об услугах и товарах;
+- организация доставки товаров;
+- проведение опросов и исследований;
+- направление уведомлений о новых товарах и услугах.
+
+4. Правовые основания обработки персональных данных
+4.1. Правовыми основаниями обработки персональных данных являются:
+- Федеральный закон «О персональных данных»;
+- уставные документы Оператора;
+- договоры, заключаемые между Оператором и субъектами персональных данных;
+- согласие субъектов персональных данных на обработку их персональных данных.
+
+5. Объем и категории обрабатываемых персональных данных
+5.1. Оператор обрабатывает следующие персональные данные:
+- фамилия, имя, отчество;
+- дата рождения;
+- контактный телефон;
+- адрес электронной почты;
+- почтовый адрес;
+- сведения о заказах и приобретенных товарах.
+
+6. Порядок и условия обработки персональных данных
+6.1. Обработка персональных данных осуществляется с согласия субъекта персональных данных.
+6.2. Оператор принимает необходимые правовые, организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа к ним, уничтожения, изменения, блокирования, копирования, предоставления, распространения.
+
+7. Права субъектов персональных данных
+7.1. Субъект персональных данных имеет право:
+- получать информацию, касающуюся обработки его персональных данных;
+- требовать уточнения его персональных данных, их блокирования или уничтожения;
+- отозвать согласие на обработку персональных данных;
+- обжаловать действия или бездействие Оператора в уполномоченный орган по защите прав субъектов персональных данных или в судебном порядке.
+
+8. Заключительные положения
+8.1. Настоящая Политика является общедоступным документом.
+8.2. Оператор вправе вносить изменения в настоящую Политику. При внесении изменений Оператор уведомляет об этом пользователей путем размещения новой редакции Политики на сайте.`
+            },
+            consent: {
+                title: 'Согласие на обработку персональных данных',
+                body: `СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ
+
+Я, субъект персональных данных, в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» свободно, своей волей и в своем интересе даю согласие Индивидуальному предпринимателю Миндрул Юлии Валерьевне (ИНН 140203283546, ОГРНИП 325619600173065), действующему от имени АКАДЕМИИ АПКБ (далее – Оператор), на обработку моих персональных данных, указанных при регистрации и/или оформлении заказа на сайте.
+
+Цели обработки персональных данных:
+- заключение и исполнение договоров купли-продажи;
+- доставка товаров;
+- предоставление консультаций по товарам и услугам;
+- направление информации о новых товарах, услугах, акциях и специальных предложениях;
+- проведение маркетинговых исследований.
+
+Перечень персональных данных, на обработку которых дается согласие:
+- фамилия, имя, отчество;
+- контактный телефон;
+- адрес электронной почты;
+- почтовый адрес;
+- сведения о заказах.
+
+Я согласен с тем, что Оператор вправе осуществлять следующие действия с моими персональными данными: сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, передача (распространение, предоставление, доступ), обезличивание, блокирование, удаление, уничтожение.
+
+Срок действия согласия: до достижения целей обработки или до отзыва согласия.
+
+Я осознаю, что могу отозвать свое согласие, направив письменное уведомление на адрес: г. Таганрог, ул. Социалистическая, 26, либо на электронный адрес: akademy.apkb@mail.ru.
+
+Я подтверждаю, что мне известны мои права как субъекта персональных данных, предусмотренные Федеральным законом «О персональных данных».`
+            },
+            cookie: {
+                title: 'Политика использования файлов cookie',
+                body: `ПОЛИТИКА ИСПОЛЬЗОВАНИЯ ФАЙЛОВ COOKIE
+
+1. Что такое файлы cookie
+1.1. Файлы cookie (куки) – это небольшие текстовые файлы, которые сохраняются на вашем устройстве (компьютере, планшете, смартфоне) при посещении веб-сайтов.
+1.2. Файлы cookie позволяют сайту запоминать ваши действия и предпочтения (такие как язык, размер шрифта и другие настройки отображения) в течение определенного времени, чтобы вам не приходилось повторно вводить их при повторном посещении сайта или переходе с одной страницы на другую.
+
+2. Какие файлы cookie мы используем
+2.1. Необходимые cookie – обеспечивают корректную работу сайта, позволяют использовать основные функции и защищенные зоны.
+2.2. Аналитические cookie – помогают нам понять, как посетители взаимодействуют с сайтом, собирая и сообщая информацию анонимно. Мы используем эти данные для улучшения работы сайта.
+2.3. Функциональные cookie – позволяют сайту запоминать ваши выборы (такие как имя пользователя, язык или регион) и предоставлять расширенные, персонализированные функции.
+2.4. Маркетинговые cookie – используются для отслеживания посетителей на веб-сайтах. Цель – показывать рекламу, которая актуальна и интересна конкретному пользователю.
+
+3. Как мы используем файлы cookie для отслеживания клиентов
+3.1. Мы используем файлы cookie для:
+- Анализа поведения пользователей на сайте (какие страницы посещаются, время пребывания, переходы между страницами);
+- Определения интересов клиентов к конкретным товарам и услугам;
+- Оптимизации маркетинговых кампаний и персонализации предложений;
+- Повышения эффективности работы сайта и улучшения пользовательского опыта;
+- Сбора статистики о посещаемости сайта.
+
+4. Управление файлами cookie
+4.1. Вы можете в любой момент изменить настройки вашего браузера, чтобы блокировать файлы cookie или предупреждать вас о их отправке.
+4.2. Обратите внимание, что отключение файлов cookie может повлиять на функциональность сайта и сделать невозможным использование некоторых его функций.
+
+5. Сторонние сервисы
+5.1. Мы можем использовать сторонние сервисы аналитики (такие как Яндекс.Метрика, Google Analytics), которые также устанавливают файлы cookie на ваше устройство.
+5.2. Эти сервисы помогают нам анализировать использование сайта и улучшать его работу.
+
+6. Согласие на использование cookie
+6.1. Продолжая использовать наш сайт, вы соглашаетесь с использованием файлов cookie в соответствии с настоящей Политикой.
+6.2. При первом посещении сайта вы видите уведомление об использовании cookie. Нажимая «Принять», вы подтверждаете свое согласие.
+
+7. Изменения в политике
+7.1. Мы оставляем за собой право вносить изменения в настоящую Политику. Изменения вступают в силу с момента их публикации на сайте.`
+            },
+            disclaimer: {
+                title: 'Отказ от ответственности',
+                body: `ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ
+
+1. Общие положения
+1.1. Информация, размещенная на настоящем сайте, носит исключительно информационный характер и не является публичной офертой, определяемой положениями статьи 437 Гражданского кодекса Российской Федерации.
+1.2. Для получения точной информации о наличии, стоимости и характеристиках товаров необходимо связаться с нами по указанным контактам.
+
+2. Точность информации
+2.1. Мы прилагаем все усилия для обеспечения точности информации, размещенной на сайте. Однако мы не гарантируем абсолютную точность, полноту или актуальность информации.
+2.2. Технические характеристики товаров могут быть изменены производителем без предварительного уведомления.
+2.3. Внешний вид товаров может отличаться от изображений, представленных на сайте.
+
+3. Ограничение ответственности
+3.1. АКАДЕМИЯ АПКБ не несет ответственности за:
+- любые убытки, возникшие в результате использования или невозможности использования сайта;
+- несанкционированный доступ к коммуникациям пользователя;
+- любые ошибки, упущения, прерывания, дефекты, задержки в работе или передаче данных;
+- сбои в работе компьютерного оборудования, каналов связи, кражу, уничтожение или несанкционированный доступ к файлам и данным.
+
+4. Внешние ссылки
+4.1. Сайт может содержать ссылки на сторонние ресурсы. АКАДЕМИЯ АПКБ не несет ответственности за содержание, точность или мнения, выраженные на таких сайтах.
+4.2. Включение ссылок на сторонние ресурсы не означает одобрения АКАДЕМИЕЙ АПКБ материалов, размещенных на этих ресурсах.
+
+5. Правовые ограничения
+5.1. Продукция, представленная на сайте, предназначена для использования в соответствии с законодательством Российской Федерации.
+5.2. Покупатель несет полную ответственность за соблюдение законодательства при использовании приобретенной продукции.
+
+6. Изменения
+6.1. АКАДЕМИЯ АПКБ оставляет за собой право в любое время без предварительного уведомления вносить изменения в материалы и услуги, предоставляемые на сайте, а также в упомянутые в них продукты и цены.
+
+7. Применимое право
+7.1. Настоящий Отказ от ответственности регулируется и толкуется в соответствии с законодательством Российской Федерации.`
+            },
+            factcheck: {
+                title: 'Политика проверки фактов',
+                body: `ПОЛИТИКА ПРОВЕРКИ ФАКТОВ
+
+1. Общие принципы
+1.1. АКАДЕМИЯ АПКБ стремится обеспечить достоверность и точность всей информации, размещаемой на сайте и в рекламных материалах.
+1.2. Мы понимаем важность предоставления нашим клиентам и партнерам только проверенной и актуальной информации.
+
+2. Источники информации
+2.1. Технические характеристики продукции получены от производителей и подтверждены соответствующей документацией.
+2.2. Информация о ценах и наличии регулярно обновляется на основе данных складского учета.
+2.3. Фотографии и видеоматериалы являются оригинальными или получены от официальных представителей производителей.
+
+3. Процедура проверки
+3.1. Вся информация о продукции проходит проверку на соответствие технической документации.
+3.2. Цены проверяются на актуальность не реже одного раза в неделю.
+3.3. Юридические документы (лицензии, сертификаты) проверяются на действительность.
+
+4. Исправление ошибок
+4.1. Если вы обнаружили неточность или ошибку в размещенной информации, пожалуйста, сообщите нам по адресу akademy.apkb@mail.ru.
+4.2. Мы обязуемся рассмотреть ваше сообщение в течение 3 рабочих дней и внести необходимые исправления.
+
+5. Прозрачность
+5.1. Мы открыты для диалога и готовы предоставить дополнительные подтверждающие документы по запросу.
+5.2. По требованию клиентов мы предоставляем копии сертификатов, лицензий и других документов, подтверждающих качество и легальность продукции.
+
+6. Ответственность за информацию
+6.1. АКАДЕМИЯ АПКБ несет ответственность за достоверность информации, размещенной на официальных каналах коммуникации.
+6.2. Мы не несем ответственности за искажение информации при ее передаче через третьих лиц.`
+            },
+            terms: {
+                title: 'Пользовательское соглашение',
+                body: `ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ
+
+1. Общие положения
+1.1. Настоящее Пользовательское соглашение (далее – Соглашение) относится к сайту АКАДЕМИИ АПКБ, расположенному по адресу в сети Интернет.
+1.2. Настоящее Соглашение регулирует отношения между Администрацией сайта и Пользователем сайта.
+1.3. Администрация сайта оставляет за собой право в любое время изменять, добавлять или удалять пункты настоящего Соглашения без уведомления Пользователя.
+
+2. Определения терминов
+2.1. «Пользователь» – лицо, имеющее доступ к сайту, посредством сети Интернет и использующее сайт.
+2.2. «Администрация сайта» – уполномоченные сотрудники на управления сайтом, действующие от имени АКАДЕМИИ АПКБ.
+
+3. Предмет соглашения
+3.1. Предметом настоящего Соглашения является предоставление Администрацией сайта Пользователю доступа к содержащимся на сайте товарам и/или оказываемым услугам.
+3.2. Под действие настоящего Соглашения подпадают все существующие (реально функционирующие) на данный момент услуги (сервисы) сайта, а также любые их последующие модификации и появляющиеся в дальнейшем дополнительные услуги (сервисы).
+
+4. Права и обязанности сторон
+4.1. Пользователь вправе:
+- осуществлять поиск информации на сайте;
+- получать информацию о товарах и услугах;
+- оформлять заказы на приобретение товаров;
+- использовать сайт в иных целях, не запрещенных законодательством РФ.
+
+4.2. Администрация сайта вправе:
+- изменять правила пользования сайтом, а также изменять содержание данного сайта;
+- ограничить доступ к сайту в случае нарушения Пользователем условий настоящего Соглашения;
+- собирать и анализировать данные о предпочтениях Пользователей с целью улучшения качества услуг.
+
+5. Ответственность
+5.1. Пользователь лично несет полную ответственность за распространяемую им информацию.
+5.2. Пользователь признает, что ответственность за любую информацию, к которой он получил доступ с использованием сайта, несет лицо, создавшее данную информацию.
+5.3. Администрация сайта не несет ответственности за достоверность информации, размещенной Пользователями на сайте.
+
+6. Разрешение споров
+6.1. В случае возникновения споров и разногласий, Стороны будут прилагать все усилия для их разрешения путем переговоров.
+6.2. Если Стороны не достигнут соглашения путем переговоров, споры подлежат разрешению в судебном порядке в соответствии с действующим законодательством Российской Федерации.
+
+7. Заключительные положения
+7.1. Настоящее Соглашение вступает в силу с момента начала использования Пользователем сайта.
+7.2. Настоящее Соглашение действует бессрочно.
+7.3. Если по тем или иным причинам одно или несколько положений настоящего Соглашения будут признаны недействительными или не имеющими юридической силы, это не оказывает влияния на действительность или применимость остальных положений Соглашения.`
+            }
+        };
+
+        function openModal(type) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = modalContent[type].title;
+            body.textContent = modalContent[type].body;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
